@@ -1,0 +1,10 @@
+<template>
+  <v-tabs>
+    <v-tab>Hallo</v-tab>
+    <v-tab>Du</v-tab>
+    <v-tab>Da</v-tab>
+    <v-tab-item>Hallo!!!</v-tab-item>
+    <v-tab-item>Du!!!</v-tab-item>
+    <v-tab-item>Da!!!</v-tab-item>
+  </v-tabs>
+</template>
