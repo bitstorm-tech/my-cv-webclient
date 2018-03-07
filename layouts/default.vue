@@ -25,6 +25,17 @@
           </v-list-tile-content>
         </v-list-tile>
 
+        <v-list-tile nuxt to="/data/skills">
+          <v-list-tile-action>
+            <v-icon medium>fa-star</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              Skills
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
         <v-list-tile nuxt to="/data/projects">
           <v-list-tile-action>
             <v-icon medium>fa-cubes</v-icon>
