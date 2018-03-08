@@ -1,27 +1,53 @@
 <template>
-  <v-layout column justify-center align-center>
-    <v-flex xs12 sm8 md6>
-      <v-card>
-        <v-card-title class="headline">Welcome to the Vuetify + Nuxt.js template</v-card-title>
+  <v-container>
+    <v-layout column justify-center align-center>
+      <v-card width="500px">
+        <v-toolbar>
+          <v-toolbar-title v-if="!createAccount">Login</v-toolbar-title>
+          <v-toolbar-title v-if="createAccount">Create Account</v-toolbar-title>
+        </v-toolbar>
         <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>For more information on Vuetify, check out the <a href="https://vuetifyjs.com" target="_blank">documentation</a>.</p>
-          <p>If you have questions, please join the official <a href="https://chat.vuetifyjs.com/" target="_blank" title="chat">discord</a>.</p>
-          <p>Find a bug? Report it on the github <a href="https://github.com/vuetifyjs/vuetify/issues" target="_blank" title="contribute">issue board</a>.</p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a href="https://nuxtjs.org/" target="_blank">Nuxt Documentation</a>
-          <br>
-          <a href="https://github.com/nuxt/nuxt.js" target="_blank">Nuxt GitHub</a>
+          <v-text-field type="email" label="E-Mail" v-model="email" />
+          <v-text-field type="password" label="Password" v-model="password" />
+          <v-text-field v-if="createAccount" type="password" label="Repeat Password" v-model="repeatPassword" />
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" flat nuxt to="/inspire">Continue</v-btn>
-        </v-card-actions>
+        <v-btn v-if="!createAccount" @click="login" :disabled="!canLogin()">Login</v-btn>
+        <v-btn v-if="!createAccount" @click="createAccount = true">New Account</v-btn>
+        <v-btn v-if="createAccount" @click="create" :disabled="!canCreateAccount()">Create</v-btn>
+        <v-btn v-if="createAccount" @click="createAccount = false">Cancel</v-btn>
       </v-card>
-    </v-flex>
-  </v-layout>
+    </v-layout>
+  </v-container>
 </template>
+
+<script>
+export default {
+  layout: "login",
+  data() {
+    return {
+      email: "",
+      password: "",
+      repeatPassword: "",
+      createAccount: false
+    };
+  },
+  methods: {
+    login() {
+      this.$router.push("/account");
+    },
+    async create() {
+      console.log("Createing account ...");
+      await this.$axios.$put("/users", {
+        email: this.email,
+        password: this.password
+      });
+    },
+    canCreateAccount() {
+      return this.canLogin() && this.password === this.repeatPassword;
+    },
+    canLogin() {
+      return this.email.length > 0 && this.password.length > 0;
+    }
+  }
+};
+</script>

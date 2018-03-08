@@ -3,6 +3,17 @@
     <v-navigation-drawer app>
       <v-list>
 
+        <v-list-tile nuxt to="/account">
+          <v-list-tile-action>
+            <v-icon medium>fa-user</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              Account
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
         <v-list-tile nuxt to="/data/personal">
           <v-list-tile-action>
             <v-icon medium>fa-user</v-icon>
@@ -43,6 +54,17 @@
           <v-list-tile-content>
             <v-list-tile-title>
               Presentation
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile nuxt to="/">
+          <v-list-tile-action>
+            <v-icon medium>fa-sign-out</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              Logout
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
