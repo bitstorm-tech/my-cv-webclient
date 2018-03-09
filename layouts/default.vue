@@ -71,7 +71,7 @@
 
         <v-list-tile nuxt to="/">
           <v-list-tile-action>
-            <v-icon medium>fa-sign-out</v-icon>
+            <v-icon medium>fa-sign-out-alt</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>

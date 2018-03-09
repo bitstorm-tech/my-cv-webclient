@@ -3,6 +3,10 @@
     <v-layout column align-center justify-center fill-height>
       <v-card width="500px">
         <v-toolbar>
+          <v-toolbar-side-icon>
+            <v-icon v-if="!createAccount">fa-sign-in-alt</v-icon>
+            <v-icon v-if="createAccount">fa-edit</v-icon>
+          </v-toolbar-side-icon>
           <v-toolbar-title v-if="!createAccount">Login</v-toolbar-title>
           <v-toolbar-title v-if="createAccount">Create Account</v-toolbar-title>
         </v-toolbar>
@@ -11,10 +15,10 @@
           <v-text-field type="password" label="Password" v-model="password" />
           <v-text-field v-if="createAccount" type="password" label="Repeat Password" v-model="repeatPassword" />
         </v-card-text>
-        <v-btn v-if="!createAccount" @click="login" :disabled="!canLogin()">Login</v-btn>
-        <v-btn v-if="!createAccount" @click="createAccount = true">New Account</v-btn>
-        <v-btn v-if="createAccount" @click="create" :disabled="!canCreateAccount()">Create</v-btn>
-        <v-btn v-if="createAccount" @click="createAccount = false">Cancel</v-btn>
+        <v-btn flat v-if="!createAccount" @click="login" :disabled="!canLogin()">Login</v-btn>
+        <v-btn flat v-if="!createAccount" @click="createAccount = true">New Account</v-btn>
+        <v-btn flat v-if="createAccount" @click="create" :disabled="!canCreateAccount()">Create</v-btn>
+        <v-btn flat v-if="createAccount" @click="createAccount = false">Cancel</v-btn>
       </v-card>
       <v-snackbar v-model="snackbar" color="red" :timeout="0" top>
         {{ snackbarText }}
