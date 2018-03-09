@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-layout column justify-center align-center>
+    <v-layout column align-center justify-center fill-height>
       <v-card width="500px">
         <v-toolbar>
           <v-toolbar-title v-if="!createAccount">Login</v-toolbar-title>
@@ -16,6 +16,12 @@
         <v-btn v-if="createAccount" @click="create" :disabled="!canCreateAccount()">Create</v-btn>
         <v-btn v-if="createAccount" @click="createAccount = false">Cancel</v-btn>
       </v-card>
+      <v-snackbar v-model="snackbar" color="red" :timeout="0" top>
+        {{ snackbarText }}
+        <v-btn flat icon @click="snackbar = false">
+          <v-icon>fa-times</v-icon>
+        </v-btn>
+      </v-snackbar>
     </v-layout>
   </v-container>
 </template>
@@ -28,7 +34,9 @@ export default {
       email: "",
       password: "",
       repeatPassword: "",
-      createAccount: false
+      createAccount: false,
+      snackbarText: "Hallo",
+      snackbar: false
     };
   },
   methods: {
@@ -36,17 +44,32 @@ export default {
       this.$router.push("/account");
     },
     async create() {
-      console.log("Createing account ...");
-      await this.$axios.$put("/users", {
-        email: this.email,
-        password: this.password
-      });
+      try {
+        await this.$axios.$put("/accounts", {
+          email: this.email,
+          password: this.password
+        });
+      } catch (error) {
+        if (error.response.status === 403) {
+          this.showSnackbar("Account already exists!");
+        } else {
+          this.showSnackbar(
+            "We had some problems to create your account, please try again later."
+          );
+        }
+        return;
+      }
+      this.createAccount = false;
     },
     canCreateAccount() {
       return this.canLogin() && this.password === this.repeatPassword;
     },
     canLogin() {
       return this.email.length > 0 && this.password.length > 0;
+    },
+    showSnackbar(text) {
+      this.snackbarText = text;
+      this.snackbar = true;
     }
   }
 };
