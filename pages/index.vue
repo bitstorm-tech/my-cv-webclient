@@ -37,7 +37,7 @@ export default {
     },
     async create() {
       console.log("Createing account ...");
-      await this.$axios.$put("/users", {
+      await this.$axios.$put("/accounts", {
         email: this.email,
         password: this.password
       });
