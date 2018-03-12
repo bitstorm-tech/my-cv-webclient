@@ -1,91 +1,61 @@
 <template>
-  <v-app dark>
-    <v-navigation-drawer app>
-      <v-list>
-
-        <v-list-tile nuxt to="/account">
-          <v-list-tile-action>
-            <v-icon medium>fa-user</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Account
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile nuxt to="/data/personal">
-          <v-list-tile-action>
-            <v-icon medium>fa-user</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Personal
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile nuxt to="/data/education">
-          <v-list-tile-action>
-            <v-icon medium>fa-graduation-cap</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Education
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile nuxt to="/data/skills">
-          <v-list-tile-action>
-            <v-icon medium>fa-star</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Skills
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile nuxt to="/data/projects">
-          <v-list-tile-action>
-            <v-icon medium>fa-cubes</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Projects
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile nuxt to="/presentation">
-          <v-list-tile-action>
-            <v-icon medium>fa-id-badge</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Presentation
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile nuxt to="/">
-          <v-list-tile-action>
-            <v-icon medium>fa-sign-out-alt</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>
-              Logout
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-      </v-list>
-    </v-navigation-drawer>
-    <v-content>
-      <v-container>
-        <nuxt />
-      </v-container>
-    </v-content>
-  </v-app>
+  <div class="container">
+    <div class="navbar">
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <div class="navbar-item">
+            <nuxt-link to="/profile">Profile</nuxt-link>
+          </div>
+          <div class="navbar-item">
+            <nuxt-link to="/education">Education</nuxt-link>
+          </div>
+          <div class="navbar-item">
+            <nuxt-link to="/skills">Skills</nuxt-link>
+          </div>
+          <div class="navbar-item">
+            <nuxt-link to="/projects">Projects</nuxt-link>
+          </div>
+        </div>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <nuxt-link to="/account">Account</nuxt-link>
+          </div>
+          <div class="navbar-item">
+            <nuxt-link to="/">Signout</nuxt-link>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nuxt/>
+  </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      selectedProfile: "",
+      profiles: [
+        {
+          id: "1-1",
+          name: "Josef Bauer"
+        },
+        {
+          id: "1-2",
+          name: "Hans Huber"
+        },
+        {
+          id: "1-3",
+          name: "Stefan Mayer"
+        }
+      ]
+    };
+  },
+  methods: {
+    onSelect(id) {
+      const selected = this.profiles.find(profile => profile.id === id);
+      this.selectedProfile = selected ? selected.name : "";
+    }
+  }
+};
+</script>

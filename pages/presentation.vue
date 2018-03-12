@@ -1,3 +1,3 @@
 <template>
-  <div>This is the presentation page!</div>
+  <h1>Presentation Page</h1>
 </template>

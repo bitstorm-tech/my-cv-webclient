@@ -31,14 +31,14 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    'vuetify/dist/vuetify.min.css'
+    'buefy/lib/buefy.css'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/vuetify'
+    '@/plugins/buefy'
   ],
 
   /*
@@ -64,6 +64,11 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
+    postcss: {
+      plugins: {
+        'postcss-custom-properties': false
+      }
+    },
     extend(config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {

@@ -1,33 +1,39 @@
 <template>
-  <v-container>
-    <v-layout column align-center justify-center fill-height>
-      <v-card width="500px">
-        <v-toolbar>
-          <v-toolbar-side-icon>
-            <v-icon v-if="!createAccount">fa-sign-in-alt</v-icon>
-            <v-icon v-if="createAccount">fa-edit</v-icon>
-          </v-toolbar-side-icon>
-          <v-toolbar-title v-if="!createAccount">Login</v-toolbar-title>
-          <v-toolbar-title v-if="createAccount">Create Account</v-toolbar-title>
-        </v-toolbar>
-        <v-card-text>
-          <v-text-field type="email" label="E-Mail" v-model="email" />
-          <v-text-field type="password" label="Password" v-model="password" />
-          <v-text-field v-if="createAccount" type="password" label="Repeat Password" v-model="repeatPassword" />
-        </v-card-text>
-        <v-btn flat v-if="!createAccount" @click="login" :disabled="!canLogin()">Login</v-btn>
-        <v-btn flat v-if="!createAccount" @click="createAccount = true">New Account</v-btn>
-        <v-btn flat v-if="createAccount" @click="create" :disabled="!canCreateAccount()">Create</v-btn>
-        <v-btn flat v-if="createAccount" @click="createAccount = false">Cancel</v-btn>
-      </v-card>
-      <v-snackbar v-model="snackbar" color="red" :timeout="0" top>
-        {{ snackbarText }}
-        <v-btn flat icon @click="snackbar = false">
-          <v-icon>fa-times</v-icon>
-        </v-btn>
-      </v-snackbar>
-    </v-layout>
-  </v-container>
+  <div class="columns is-centered">
+    <div class="column is-3">
+      <div class="card">
+        <header v-if="!createAccount" class="card-header">
+          <p class="card-header-icon fa fa-sign-in-alt"></p>
+          <p class="card-header-title">Login</p>
+        </header>
+        <header v-if="createAccount" class="card-header">
+          <p class="card-header-icon fa fa-edit"></p>
+          <p class="card-header-title">Create Account</p>
+        </header>
+        <div class="card-content">
+          <div class="content">
+            <b-field label="E-Mail">
+              <b-input type="email" v-model="email" />
+            </b-field>
+            <b-field label="Password">
+              <b-input type="password" v-model="password" />
+            </b-field>
+            <b-field v-if="createAccount" label="Repeat Password">
+              <b-input type="password" v-model="repeatPassword" />
+            </b-field>
+          </div>
+        </div>
+        <footer v-if="!createAccount" class="card-footer">
+          <nuxt-link to="/profile" class="card-footer-item">Login</nuxt-link>
+          <a class="card-footer-item" @click="createAccount = true">Create Account</a>
+        </footer>
+        <footer v-if="createAccount" class="card-footer">
+          <a disabled class="card-footer-item">Create</a>
+          <a class="card-footer-item" @click="createAccount = false">Cancel</a>
+        </footer>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
