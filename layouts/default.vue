@@ -1,31 +1,22 @@
 <template>
   <div class="container">
-    <div class="navbar">
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          <div class="navbar-item">
-            <nuxt-link to="/profile">Profile</nuxt-link>
-          </div>
-          <div class="navbar-item">
-            <nuxt-link to="/education">Education</nuxt-link>
-          </div>
-          <div class="navbar-item">
-            <nuxt-link to="/skills">Skills</nuxt-link>
-          </div>
-          <div class="navbar-item">
-            <nuxt-link to="/projects">Projects</nuxt-link>
+    <nav class="navbar is-dark">
+      <div class="navbar-start">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">Profile: {{ selectedProfile }}</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" v-for="profile in profiles" :key="profile.id" @click="onSelect(profile.id)">{{ profile.name }}</a>
           </div>
         </div>
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <nuxt-link to="/account">Account</nuxt-link>
-          </div>
-          <div class="navbar-item">
-            <nuxt-link to="/">Signout</nuxt-link>
-          </div>
-        </div>
+        <nuxt-link class="navbar-item" to="/education">Education</nuxt-link>
+        <nuxt-link class="navbar-item" to="/skills">Skills</nuxt-link>
+        <nuxt-link class="navbar-item" to="/projects">Projects</nuxt-link>
       </div>
-    </div>
+      <div class="navbar-end">
+        <nuxt-link class="navbar-item" to="/account">Account</nuxt-link>
+        <nuxt-link class="navbar-item" to="/">Signout</nuxt-link>
+      </div>
+    </nav>
     <nuxt/>
   </div>
 </template>
