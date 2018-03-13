@@ -16,19 +16,19 @@
               <b-input type="email" v-model="email" />
             </b-field>
             <b-field label="Password">
-              <b-input type="password" v-model="password" />
+              <b-input type="password" v-model="password" password-reveal />
             </b-field>
             <b-field v-if="createAccount" label="Repeat Password">
-              <b-input type="password" v-model="repeatPassword" />
+              <b-input type="password" v-model="repeatPassword" password-reveal />
             </b-field>
           </div>
         </div>
         <footer v-if="!createAccount" class="card-footer">
-          <nuxt-link to="/profile" class="card-footer-item">Login</nuxt-link>
+          <a class="card-footer-item" @click="login">Login</a>
           <a class="card-footer-item" @click="createAccount = true">Create Account</a>
         </footer>
         <footer v-if="createAccount" class="card-footer">
-          <a disabled class="card-footer-item">Create</a>
+          <a class="card-footer-item" @click="create">Create</a>
           <a class="card-footer-item" @click="createAccount = false">Cancel</a>
         </footer>
       </div>
@@ -51,25 +51,39 @@ export default {
   },
   methods: {
     login() {
-      this.$router.push("/account");
+      if (this.canLogin()) {
+        this.$router.push("/account");
+      } else {
+        this.showSnackbar("Please enter email and password.");
+      }
     },
     async create() {
-      try {
-        await this.$axios.$put("/accounts", {
-          email: this.email,
-          password: this.password
-        });
-      } catch (error) {
-        if (error.response.status === 403) {
-          this.showSnackbar("Account already exists!");
-        } else {
-          this.showSnackbar(
-            "We had some problems to create your account, please try again later."
-          );
+      if (this.canCreateAccount()) {
+        try {
+          await this.$axios.$put("/accounts", {
+            email: this.email,
+            password: this.password
+          });
+        } catch (error) {
+          if (error.response.status === 403) {
+            this.showSnackbar("Account already exists.");
+          } else {
+            this.showSnackbar(
+              "We had some problems to create your account, please try again later."
+            );
+          }
+          return;
         }
-        return;
+        this.createAccount = false;
+      } else {
+        if (this.password !== this.repeatPassword) {
+          this.showSnackbar(
+            "Your password and repeated password does not match."
+          );
+        } else {
+          this.showSnackbar("Your account credentials are incorrect.");
+        }
       }
-      this.createAccount = false;
     },
     canCreateAccount() {
       return this.canLogin() && this.password === this.repeatPassword;
@@ -77,9 +91,14 @@ export default {
     canLogin() {
       return this.email.length > 0 && this.password.length > 0;
     },
-    showSnackbar(text) {
-      this.snackbarText = text;
-      this.snackbar = true;
+    showSnackbar(message) {
+      this.$snackbar.open({
+        message,
+        type: "is-warning",
+        queue: false,
+        position: "is-bottom",
+        duration: 5000
+      });
     }
   }
 };
