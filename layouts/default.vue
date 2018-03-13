@@ -5,7 +5,8 @@
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">Profile: {{ selectedProfile }}</a>
           <div class="navbar-dropdown">
-            <a class="navbar-item" v-for="profile in profiles" :key="profile.id" @click="onSelect(profile.id)">{{ profile.name }}</a>
+            <nuxt-link class="navbar-item" to="/profile">NEW</nuxt-link>
+            <a class="navbar-item" v-for="profile in profiles" :key="profile.id" @click="onSelect(profile.id)">{{ profile.firstName + ' ' + profile.lastName }}</a>
           </div>
         </div>
         <nuxt-link class="navbar-item" to="/education">Education</nuxt-link>
@@ -23,30 +24,21 @@
 
 <script>
 export default {
-  data() {
-    return {
-      selectedProfile: "",
-      profiles: [
-        {
-          id: "1-1",
-          name: "Josef Bauer"
-        },
-        {
-          id: "1-2",
-          name: "Hans Huber"
-        },
-        {
-          id: "1-3",
-          name: "Stefan Mayer"
-        }
-      ]
-    };
-  },
   methods: {
     onSelect(id) {
-      const selected = this.profiles.find(profile => profile.id === id);
-      this.selectedProfile = selected ? selected.name : "";
+      this.$store.dispatch("setSelectedProfile", id);
       this.$router.push("/profile");
+    }
+  },
+  computed: {
+    profiles() {
+      return this.$store.getters.profiles;
+    },
+    selectedProfile() {
+      const selectedProfile = this.$store.getters.selectedProfile;
+      return selectedProfile
+        ? selectedProfile.firstName + " " + selectedProfile.lastName
+        : "";
     }
   }
 };
