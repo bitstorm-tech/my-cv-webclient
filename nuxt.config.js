@@ -31,7 +31,8 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    'buefy/lib/buefy.css'
+    'buefy/lib/buefy.css',
+    '@/assets/css/global.scss'
   ],
 
   /*
