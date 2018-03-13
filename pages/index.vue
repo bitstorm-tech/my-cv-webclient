@@ -13,13 +13,13 @@
         <div class="card-content">
           <div class="content">
             <b-field label="E-Mail">
-              <b-input type="email" v-model="email" />
+              <b-input type="email" v-model="email" @keyup.native.enter="createAccount ? create() : login()" />
             </b-field>
             <b-field label="Password">
-              <b-input type="password" v-model="password" password-reveal />
+              <b-input type="password" v-model="password" @keyup.native.enter="createAccount ? create() : login()" />
             </b-field>
-            <b-field v-if="createAccount" label="Repeat Password">
-              <b-input type="password" v-model="repeatPassword" password-reveal />
+            <b-field v-if="createAccount" label="Confirm Password">
+              <b-input type="password" v-model="confirmPassword" @keyup.native.enter="create" />
             </b-field>
           </div>
         </div>
@@ -43,7 +43,7 @@ export default {
     return {
       email: "",
       password: "",
-      repeatPassword: "",
+      confirmPassword: "",
       createAccount: false,
       snackbarText: "Hallo",
       snackbar: false
@@ -52,7 +52,7 @@ export default {
   methods: {
     login() {
       if (this.canLogin()) {
-        this.$router.push("/account");
+        this.$router.push("/profile");
       } else {
         this.showSnackbar("Please enter email and password.");
       }
@@ -76,9 +76,9 @@ export default {
         }
         this.createAccount = false;
       } else {
-        if (this.password !== this.repeatPassword) {
+        if (this.password !== this.confirmPassword) {
           this.showSnackbar(
-            "Your password and repeated password does not match."
+            "Your password and confirmed password does not match."
           );
         } else {
           this.showSnackbar("Your account credentials are incorrect.");
@@ -86,7 +86,7 @@ export default {
       }
     },
     canCreateAccount() {
-      return this.canLogin() && this.password === this.repeatPassword;
+      return this.canLogin() && this.password === this.confirmPassword;
     },
     canLogin() {
       return this.email.length > 0 && this.password.length > 0;
