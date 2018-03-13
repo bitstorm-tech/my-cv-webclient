@@ -1,4 +1,6 @@
 <template>
-  <h1>Education Page</h1>
+  <section class="section">
+    <h1>Education Page</h1>
+  </section>
 </template>
 

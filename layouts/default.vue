@@ -46,6 +46,7 @@ export default {
     onSelect(id) {
       const selected = this.profiles.find(profile => profile.id === id);
       this.selectedProfile = selected ? selected.name : "";
+      this.$router.push("/profile");
     }
   }
 };
