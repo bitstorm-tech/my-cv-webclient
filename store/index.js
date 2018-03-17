@@ -12,7 +12,9 @@ export default function createStore() {
         state.profiles = profiles;
       },
       loadAccount(state, account) {
-        state.account = account;
+        if (state.account === null) {
+          state.account = account;
+        }
       },
       upsertProfile(state, profile) {
         const index = state.profiles.findIndex(_profile => _profile.id === profile.id);
@@ -28,12 +30,22 @@ export default function createStore() {
       }
     },
     actions: {
-      loadAccount(context, email) {
-        this.$axios.get("/accounts")
+      async loadAccount(context, email) {
+        try {
+          const escapedEmail = email.replace("@", "%40");
+          const response = await this.$axios.get("/accounts/" + escapedEmail);
+          context.commit("loadAccount", response.data);
+        } catch (error) {
+          console.log("Error while load account", error);
+        }
       },
-      upsertProfile(context, profile) {
-        this.$axios.put("/profiles", profile)
-          .then(response => context.commit('upsertProfile', response.data));
+      async upsertProfile(context, profile) {
+        try {
+          const response = await this.$axios.put("/profiles", profile);
+          context.commit("upsertProfile", response.data);
+        } catch (error) {
+          console.log("Error while upserting profile", error);
+        }
       },
       setSelectedProfile(context, id) {
         context.commit('setSelectedProfile', id);

@@ -61,6 +61,7 @@ export default {
         try {
           const jwt = await this.$axios.$post("/login", { payload });
           setJwt(jwt);
+          this.$store.dispatch("loadAccount", this.email);
           this.$router.push("/profile");
         } catch (error) {
           if (error.response.status === 401) {
