@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import { setJwt } from "@/assets/js/jwt-utils";
+
 export default {
   layout: "login",
   data() {
@@ -50,22 +52,35 @@ export default {
     };
   },
   methods: {
-    login() {
+    async login() {
       if (this.canLogin()) {
-        this.$router.push("/profile");
+        const payload = {
+          email: this.email,
+          password: this.password
+        };
+        try {
+          const jwt = await this.$axios.$post("/login", { payload });
+          setJwt(jwt);
+          this.$router.push("/profile");
+        } catch (error) {
+          if (error.response.status === 401) {
+            this.showSnackbar("Invalid login");
+          } else {
+            this.showSnackbar("Error while login, please try again later");
+          }
+        }
       } else {
         this.showSnackbar("Please enter email and password.");
       }
     },
     async create() {
       if (this.canCreateAccount()) {
+        const payload = {
+          email: this.email,
+          password: this.password
+        };
         try {
-          await this.$axios.$put("/accounts", {
-            payload: {
-              email: this.email,
-              password: this.password
-            }
-          });
+          await this.$axios.$put("/accounts", { payload });
         } catch (error) {
           if (error.response.status === 403) {
             this.showSnackbar("Account already exists.");
