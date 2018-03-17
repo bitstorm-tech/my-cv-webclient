@@ -61,8 +61,10 @@ export default {
       if (this.canCreateAccount()) {
         try {
           await this.$axios.$put("/accounts", {
-            email: this.email,
-            password: this.password
+            payload: {
+              email: this.email,
+              password: this.password
+            }
           });
         } catch (error) {
           if (error.response.status === 403) {

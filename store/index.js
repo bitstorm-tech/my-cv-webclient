@@ -3,12 +3,16 @@ import Vuex from "vuex";
 export default function createStore() {
   return new Vuex.Store({
     state: {
+      account: null,
       profiles: [],
       selectedProfile: null
     },
     mutations: {
       loadProfiles(state, profiles) {
         state.profiles = profiles;
+      },
+      loadAccount(state, account) {
+        state.account = account;
       },
       upsertProfile(state, profile) {
         const index = state.profiles.findIndex(_profile => _profile.id === profile.id);
@@ -24,6 +28,9 @@ export default function createStore() {
       }
     },
     actions: {
+      loadAccount(context, email) {
+        this.$axios.get("/accounts")
+      },
       upsertProfile(context, profile) {
         this.$axios.put("/profiles", profile)
           .then(response => context.commit('upsertProfile', response.data));
