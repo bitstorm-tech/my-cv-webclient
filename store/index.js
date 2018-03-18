@@ -10,7 +10,7 @@ export default function createStore() {
     },
     mutations: {
       loadProfiles(state, profiles) {
-        profiles.forEach(profile => profile.payload.birthday = new Date())
+        profiles.forEach(profile => profileToViewModel(profile))
         state.profiles = profiles;
         if (profiles.length > 0) {
           state.selectedProfile = profiles[0];
@@ -22,7 +22,6 @@ export default function createStore() {
         }
       },
       upsertProfile(state, profile) {
-        console.log("upsertProfile:", profile);
         const index = state.profiles.findIndex(_profile => _profile.key === profile.key);
 
         if (!state.account.profileKeys.includes(profile.key)) {
@@ -31,6 +30,7 @@ export default function createStore() {
 
         if (index < 0) {
           state.profiles.push(profile);
+          state.selectedProfile = profile;
         } else {
           state.profiles[index] = profile;
         }
@@ -76,7 +76,7 @@ export default function createStore() {
         profile.accountKey = context.state.account.key;
         try {
           const response = await this.$axios.$put("/profiles", profile);
-          context.commit("upsertProfile", response.data);
+          context.commit("upsertProfile", response);
         } catch (error) {
           console.log("Error while upserting profile", error);
         }
@@ -94,4 +94,10 @@ export default function createStore() {
       }
     }
   });
+}
+
+function profileToViewModel(profile) {
+  profile.payload.birthday = new Date(profile.payload.birthday);
+
+  return profile;
 }
