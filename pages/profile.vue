@@ -36,7 +36,22 @@
         </b-field>
       </div>
     </div>
-    <button class="button" @click="save">Save</button>
+    <div class="columns">
+      <div class="column is-1">
+        <button class="button" @click="save">Save</button>
+      </div>
+      <div class="column is-1">
+        <button class="button" @click="showModal = true">Delete</button>
+      </div>
+    </div>
+    <div class="modal" :class="{'is-active': showModal}">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <span>Do you realy want to delete profile: {{selectedProfile.payload.firstName}}</span>
+      </div>
+      <button class="modal-close is-large" aria-label="close" @click="deleteSelectedProfile">Yes</button>
+      <button class="modal-close is-large" aria-label="close">No</button>
+    </div>
   </section>
 </template>
 
@@ -54,7 +69,8 @@ export default {
           birthday: new Date(),
           nationality: ""
         }
-      }
+      },
+      showModal: false
     };
   },
   methods: {
@@ -67,6 +83,9 @@ export default {
       } else {
         this.$store.dispatch("upsertProfile", this.newProfile);
       }
+    },
+    deleteSelectedProfile() {
+      this.$store.dispatch("deleteSelectedProfile");
     }
   },
   computed: {
