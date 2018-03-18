@@ -12,6 +12,9 @@ export default function createStore() {
       loadProfiles(state, profiles) {
         profiles.forEach(profile => profile.payload.birthday = new Date())
         state.profiles = profiles;
+        if (profiles.length > 0) {
+          state.selectedProfile = profiles[0];
+        }
       },
       loadAccount(state, account) {
         if (state.account === null) {
@@ -42,6 +45,10 @@ export default function createStore() {
     },
     actions: {
       async loadAccount(context) {
+        if (!process.browser) {
+          return;
+        }
+
         const email = JwtUtils.getEscapedEmail();
 
         try {
@@ -52,6 +59,10 @@ export default function createStore() {
         }
       },
       async loadProfiles(context) {
+        if (!process.browser) {
+          return;
+        }
+
         const email = JwtUtils.getEscapedEmail();
 
         try {
