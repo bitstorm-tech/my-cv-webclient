@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { setJwt } from "@/assets/js/jwt-utils";
+import JwtUtils from "@/assets/js/jwt-utils";
 
 export default {
   layout: "login",
@@ -60,7 +60,7 @@ export default {
         };
         try {
           const jwt = await this.$axios.$post("/login", { payload });
-          setJwt(jwt);
+          JwtUtils.setJwt(jwt);
           this.$store.dispatch("loadAccount", this.email);
           this.$router.push("/profile");
         } catch (error) {

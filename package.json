@@ -15,6 +15,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
     "buefy": "^0.6.3",
+    "jsonwebtoken": "^8.2.0",
     "nuxt": "^1.0.0",
     "vuetify": "1.0.4"
   },

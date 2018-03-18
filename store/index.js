@@ -1,4 +1,5 @@
 import Vuex from "vuex";
+import JwtUtils from "@/assets/js/jwt-utils"
 
 export default function createStore() {
   return new Vuex.Store({
@@ -9,6 +10,7 @@ export default function createStore() {
     },
     mutations: {
       loadProfiles(state, profiles) {
+        profiles.forEach(profile => profile.payload.birthday = new Date())
         state.profiles = profiles;
       },
       loadAccount(state, account) {
@@ -17,7 +19,12 @@ export default function createStore() {
         }
       },
       upsertProfile(state, profile) {
-        const index = state.profiles.findIndex(_profile => _profile.id === profile.id);
+        console.log("upsertProfile:", profile);
+        const index = state.profiles.findIndex(_profile => _profile.key === profile.key);
+
+        if (!state.account.profileKeys.includes(profile.key)) {
+          state.account.profileKeys.push(profile.key);
+        }
 
         if (index < 0) {
           state.profiles.push(profile);
@@ -25,30 +32,46 @@ export default function createStore() {
           state.profiles[index] = profile;
         }
       },
-      setSelectedProfile(state, id) {
-        state.selectedProfile = state.profiles.find(profile => profile.id === id);
+      setSelectedProfile(state, key) {
+        if (key) {
+          state.selectedProfile = state.profiles.find(profile => profile.key === key);
+        } else {
+          state.selectedProfile = null;
+        }
       }
     },
     actions: {
-      async loadAccount(context, email) {
+      async loadAccount(context) {
+        const email = JwtUtils.getEscapedEmail();
+
         try {
-          const escapedEmail = email.replace("@", "%40");
-          const response = await this.$axios.get("/accounts/" + escapedEmail);
-          context.commit("loadAccount", response.data);
+          const response = await this.$axios.$get("/accounts/" + email);
+          context.commit("loadAccount", response);
         } catch (error) {
-          console.log("Error while load account", error);
+          console.log("Error while fetching account", error);
+        }
+      },
+      async loadProfiles(context) {
+        const email = JwtUtils.getEscapedEmail();
+
+        try {
+          const response = await this.$axios.$get("/profiles/" + email);
+          context.commit('loadProfiles', response);
+        } catch (error) {
+          console.log("Error while fetching profiles", error)
         }
       },
       async upsertProfile(context, profile) {
+        profile.accountKey = context.state.account.key;
         try {
-          const response = await this.$axios.put("/profiles", profile);
+          const response = await this.$axios.$put("/profiles", profile);
           context.commit("upsertProfile", response.data);
         } catch (error) {
           console.log("Error while upserting profile", error);
         }
       },
-      setSelectedProfile(context, id) {
-        context.commit('setSelectedProfile', id);
+      setSelectedProfile(context, key) {
+        context.commit('setSelectedProfile', key);
       }
     },
     getters: {

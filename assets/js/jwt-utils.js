@@ -1,7 +1,18 @@
-export function setJwt(jwt) {
-  localStorage.setItem("jwt", jwt);
+import jwt from "jsonwebtoken";
+
+const JwtUtils = {
+  setJwt(jwt) {
+    localStorage.setItem("jwt", jwt);
+  },
+
+  getJwt() {
+    return localStorage.getItem("jwt")
+  },
+
+  getEscapedEmail() {
+    const token = jwt.decode(this.getJwt());
+    return token.email.replace("@", "%40");
+  }
 }
 
-export function getJwt() {
-  localStorage.getItem("jwt")
-}
+export default JwtUtils;

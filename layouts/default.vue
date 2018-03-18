@@ -3,10 +3,12 @@
     <nav class="navbar is-dark">
       <div class="navbar-start">
         <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">Profile: {{ selectedProfile }}</a>
+          <a class="navbar-link">Profile: {{ selectedProfileName }}</a>
           <div class="navbar-dropdown">
-            <nuxt-link class="navbar-item" to="/profile">NEW</nuxt-link>
-            <a class="navbar-item" v-for="profile in profiles" :key="profile.id" @click="onSelect(profile.id)">{{ profile.firstName + ' ' + profile.lastName }}</a>
+            <a class="navbar-item" @click="onSelect(null)">NEW</a>
+            <a class="navbar-item" v-for="profile in profiles" :key="profile.key" @click="onSelect(profile.key)">
+              {{ profile.payload.firstName + ' ' + profile.payload.lastName }}
+            </a>
           </div>
         </div>
         <nuxt-link class="navbar-item" to="/education">Education</nuxt-link>
@@ -25,8 +27,8 @@
 <script>
 export default {
   methods: {
-    onSelect(id) {
-      this.$store.dispatch("setSelectedProfile", id);
+    onSelect(key) {
+      this.$store.dispatch("setSelectedProfile", key);
       this.$router.push("/profile");
     }
   },
@@ -34,10 +36,12 @@ export default {
     profiles() {
       return this.$store.getters.profiles;
     },
-    selectedProfile() {
+    selectedProfileName() {
       const selectedProfile = this.$store.getters.selectedProfile;
       return selectedProfile
-        ? selectedProfile.firstName + " " + selectedProfile.lastName
+        ? `${selectedProfile.payload.firstName} ${
+            selectedProfile.payload.lastName
+          }`
         : "";
     }
   }
