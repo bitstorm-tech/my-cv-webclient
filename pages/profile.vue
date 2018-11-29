@@ -38,10 +38,20 @@
     </div>
     <div class="columns">
       <div class="column is-1">
-        <button class="button" @click="save">Save</button>
+        <a class="button is-success" @click="save">
+          <span class="icon">
+            <i class="fa fa-save"></i>
+          </span>
+          <span>Save</span>
+        </a>
       </div>
       <div class="column is-1">
-        <button class="button" @click="showModal = true">Delete</button>
+        <a class="button is-danger" @click="showModal = true">
+          <span class="icon">
+            <i class="fa fa-trash"></i>
+          </span>
+          <span>Delete</span>
+        </a>
       </div>
     </div>
     <div class="modal" :class="{'is-active': showModal}">

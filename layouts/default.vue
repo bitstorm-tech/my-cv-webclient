@@ -3,7 +3,7 @@
     <nav class="navbar is-dark">
       <div class="navbar-start">
         <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">Profile: {{ selectedProfileName }}</a>
+          <nuxt-link class="navbar-link" to="/profile">Profile: {{ selectedProfileName }}</nuxt-link>
           <div class="navbar-dropdown">
             <a class="navbar-item" @click="onSelect(null)">NEW</a>
             <a class="navbar-item" v-for="profile in profiles" :key="profile.key" @click="onSelect(profile.key)">
